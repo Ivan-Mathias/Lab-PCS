@@ -2,6 +2,15 @@ import Tesseract from 'tesseract.js';
 import { Component, createRef } from 'react';
 import * as IJS from 'image-js';
 
+const MAX_SENT_DISTANCE = 100;
+
+const alphaLower = 'aáãàâbcçdeêéfghiíîjklmnoôópqrstuúüvwxyz';
+const alphaUpper = alphaLower.toUpperCase();
+const num = '0123456789';
+const punct = '.:-/';
+const space = ' ';
+const VALID_CHARS = alphaLower + alphaUpper + num + punct + space;
+
 async function fileToImage(file) {
   return new Promise((resolve, reject) => {
     let reader = new FileReader();
@@ -28,6 +37,7 @@ class App extends Component {
     this.state = {
       progress: 0,
       result: null,
+      documentData: {},
     };
     this.handlePhoto = this.handlePhoto.bind(this);
 
@@ -48,6 +58,7 @@ class App extends Component {
       await this.worker.setParameters({
         user_defined_dpi: '70',
         tessedit_pageseg_mode: Tesseract.PSM.SPARSE_TEXT,
+        tessedit_char_whitelist: VALID_CHARS,
       });
     })();
 
@@ -96,6 +107,62 @@ class App extends Component {
       ctx.strokeRect(bbox.x0, bbox.y0, bbox.x1 - bbox.x0, bbox.y1 - bbox.y0);
       ctx.fillText('[' + block.confidence.toFixed(0) + '] ' + block.text, bbox.x0, bbox.y0);
     }
+
+    let documentData = {};
+    for (let key of ['Nome', 'CPF', 'Filiacao', 'Data de Nascimento']) {
+      documentData[key] = this.lookup(result.data.blocks, key) || '';
+    }
+    this.setState({ documentData: documentData });
+  }
+
+  lookup(blocks, key) {
+    for (let b of blocks) {
+      if (b.text.toLowerCase().trim() === key.toLowerCase()) {
+        let sameLine = [];
+        let nextLine = [];
+        for (let bb of blocks) {
+          if (b.bbox.x1 < bb.bbox.x0 && b.bbox.y0 < bb.bbox.y1 && bb.bbox.y0 < b.bbox.y1) {
+            sameLine.push(bb);
+          } else if (
+            b.bbox.x0 <= bb.bbox.x0 &&
+            b.bbox.y1 < bb.bbox.y0 &&
+            bb.bbox.y0 < b.bbox.y1 + 2 * (b.bbox.y1 - b.bbox.y0)
+          ) {
+            nextLine.push(bb);
+          }
+        }
+        let compareFn = (x, y) => (x.bbox.x0 < y.bbox.x0 ? -1 : x.bbox.x0 === y.bbox.x0 ? 1 : 0);
+        sameLine.sort(compareFn);
+        nextLine.sort(compareFn);
+
+        console.log(
+          key,
+          sameLine.map((x) => x.text),
+          nextLine.map((x) => x.text)
+        );
+
+        let lastx = b.bbox.x1;
+        let result = [];
+        for (let a of sameLine) {
+          if (a.bbox.x0 - lastx > MAX_SENT_DISTANCE) break;
+          result.push(a);
+          lastx = a.bbox.x1;
+        }
+        if (result.length > 0) return result.map((x) => x.text).join(' ');
+
+        if (nextLine[0].bbox.x0 > b.bbox.x1) {
+          continue;
+        }
+
+        lastx = b.bbox.x1;
+        for (let a of nextLine) {
+          if (a.bbox.x0 - lastx > MAX_SENT_DISTANCE) break;
+          result.push(a);
+          lastx = a.bbox.x1;
+        }
+        if (result.length > 0) return result.map((x) => x.text).join(' ');
+      }
+    }
   }
 
   render() {
@@ -108,6 +175,14 @@ class App extends Component {
           <div>
             {this.state.result.jobId} <br />
             Confidence: {this.state.result.data.confidence.toFixed(1)}% <br />
+            Dados:
+            <ul>
+              {Object.entries(this.state.documentData).map(([key, value]) => (
+                <li key={'doc/' + key}>
+                  {key}: {value}
+                </li>
+              ))}
+            </ul>
             <table style={{ border: '1px solid black' }}>
               <tbody>
                 <tr>
@@ -119,7 +194,7 @@ class App extends Component {
                   <th>y1</th>
                 </tr>
                 {this.state.result.data.blocks.map((block, i) => (
-                  <tr key={'block' + i}>
+                  <tr key={'block/' + i}>
                     <td>{block.confidence.toFixed(1)}%</td>
                     <td>{block.text}</td>
                     <td>{block.bbox.x0}</td>
