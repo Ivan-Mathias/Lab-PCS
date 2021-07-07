@@ -1,36 +1,18 @@
 import Tesseract from 'tesseract.js';
 import { Component, createRef } from 'react';
-import * as IJS from 'image-js';
+import { ocrKeyLookup } from './ocr.js';
+import { IJStoImage, fileToImage, preprocessDocumentImage } from './imageUtils.js';
 
-const MAX_SENT_DISTANCE = 100;
-
-const alphaLower = 'aáãàâbcçdeêéfghiíîjklmnoôópqrstuúüvwxyz';
+const alphaLower = 'aáãàâbcçdeêéfghiíîjklmnoôóöpqrstuúüvwxyz';
 const alphaUpper = alphaLower.toUpperCase();
 const num = '0123456789';
 const punct = '.:-/';
 const space = ' ';
 const VALID_CHARS = alphaLower + alphaUpper + num + punct + space;
 
-async function fileToImage(file) {
-  return new Promise((resolve, reject) => {
-    let reader = new FileReader();
-    reader.onload = (readerEvent) => {
-      resolve(IJS.Image.load(readerEvent.target.result));
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
-async function IJStoImage(ijsImg) {
-  return new Promise((resolve, reject) => {
-    let img = new Image();
-    img.onload = () => {
-      resolve(img);
-    };
-    img.src = ijsImg.toDataURL();
-  });
-}
-
+/**
+ * The main OCS application class.
+ */
 class App extends Component {
   constructor(props) {
     super(props);
@@ -39,8 +21,11 @@ class App extends Component {
       result: null,
       documentData: {},
     };
+
+    // Bind the handlePhoto method (needed to ensure that the event handlers work properly)
     this.handlePhoto = this.handlePhoto.bind(this);
 
+    // Create the tesseract worker and configure the worker.
     this.worker = Tesseract.createWorker({
       logger: (m) => {
         // Track progress through log messages
@@ -62,33 +47,29 @@ class App extends Component {
       });
     })();
 
+    // A reference to the html canvas
     this.canvasRef = createRef();
   }
 
-  preprocessImage(img) {
-    img = img.grey().resize({ height: 500, preserveAspectRatio: true });
-    let arr = [...Array(7).keys()].map(() => 1);
-    let bg = img.dilate({ kernel: arr.map(() => arr) }).blurFilter({ radius: 2 });
-    let withoutBg = bg.subtractImage(img).invert().level({ min: 0, max: 255 });
-    let min = withoutBg.getMin();
-    if (min > 0) withoutBg.subtract(min);
-    withoutBg.multiply(255 / withoutBg.getMax());
-    return withoutBg;
-  }
-
+  /**
+   * Event handler for when a new file is added.
+   */
   async handlePhoto(e) {
-    this.setState({ progress: 0 });
-    await this.workerReady;
-
-    // Load and draw original image
-    let img = await fileToImage(e.target.files[0]);
-
-    // Pre-process image
-    let postImg = this.preprocessImage(img);
-
-    // Draw pre-processed image
+    // Reset the dom
+    this.setState({ progress: 0, result: null, documentData: {} });
+    
     let canvas = this.canvasRef.current;
     let ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Wait until the worker is ready
+    await this.workerReady;
+
+    // Load and pre-process the image file
+    let img = await fileToImage(e.target.files[0]);
+    let postImg = preprocessDocumentImage(img);
+
+    // Draw pre-processed image
     canvas.width = postImg.width;
     canvas.height = postImg.height;
     ctx.drawImage(await IJStoImage(postImg), 0, 0);
@@ -109,63 +90,19 @@ class App extends Component {
       ctx.fillText('[' + block.confidence.toFixed(0) + '] ' + block.text, bbox.x0, bbox.y0);
     }
 
-    let documentData = {};
-    for (let key of ['Nome', 'CPF', 'Filiacao', 'Data de Nascimento']) {
-      documentData[key] = this.lookup(result.data.blocks, key) || '';
-    }
-    this.setState({ documentData: documentData });
+    this.setState({
+      documentData: {
+        Nome: ocrKeyLookup(result.data.blocks, 'Nome', 1)[0],
+        CPF: ocrKeyLookup(result.data.blocks, 'CPF', 1)[0],
+        Filiacao: ocrKeyLookup(result.data.blocks, 'Filiação', 2).join(' e '),
+        'Data de Nascimento': ocrKeyLookup(result.data.blocks, 'Data de Nascimento', 1)[0],
+      },
+    });
   }
 
-  lookup(blocks, key) {
-    for (let b of blocks) {
-      if (b.text.toLowerCase().trim() === key.toLowerCase()) {
-        let sameLine = [];
-        let nextLine = [];
-        for (let bb of blocks) {
-          if (b.bbox.x1 < bb.bbox.x0 && b.bbox.y0 < bb.bbox.y1 && bb.bbox.y0 < b.bbox.y1) {
-            sameLine.push(bb);
-          } else if (
-            b.bbox.x0 <= bb.bbox.x0 &&
-            b.bbox.y1 < bb.bbox.y0 &&
-            bb.bbox.y0 < b.bbox.y1 + 2 * (b.bbox.y1 - b.bbox.y0)
-          ) {
-            nextLine.push(bb);
-          }
-        }
-        let compareFn = (x, y) => (x.bbox.x0 < y.bbox.x0 ? -1 : x.bbox.x0 === y.bbox.x0 ? 1 : 0);
-        sameLine.sort(compareFn);
-        nextLine.sort(compareFn);
-
-        console.log(
-          key,
-          sameLine.map((x) => x.text),
-          nextLine.map((x) => x.text)
-        );
-
-        let lastx = b.bbox.x1;
-        let result = [];
-        for (let a of sameLine) {
-          if (a.bbox.x0 - lastx > MAX_SENT_DISTANCE) break;
-          result.push(a);
-          lastx = a.bbox.x1;
-        }
-        if (result.length > 0) return result.map((x) => x.text).join(' ');
-
-        if (nextLine[0].bbox.x0 > b.bbox.x1) {
-          continue;
-        }
-
-        lastx = b.bbox.x1;
-        for (let a of nextLine) {
-          if (a.bbox.x0 - lastx > MAX_SENT_DISTANCE) break;
-          result.push(a);
-          lastx = a.bbox.x1;
-        }
-        if (result.length > 0) return result.map((x) => x.text).join(' ');
-      }
-    }
-  }
-
+  /**
+   * Renders the OCR results.
+   */
   render() {
     return (
       <div className="App">
