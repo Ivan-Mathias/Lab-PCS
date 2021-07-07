@@ -70,7 +70,8 @@ class App extends Component {
     let arr = [...Array(7).keys()].map(() => 1);
     let bg = img.dilate({ kernel: arr.map(() => arr) }).blurFilter({ radius: 2 });
     let withoutBg = bg.subtractImage(img).invert().level({ min: 0, max: 255 });
-    withoutBg.subtract(withoutBg.getMin());
+    let min = withoutBg.getMin();
+    if (min > 0) withoutBg.subtract(min);
     withoutBg.multiply(255 / withoutBg.getMax());
     return withoutBg;
   }
