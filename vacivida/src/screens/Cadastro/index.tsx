@@ -4,6 +4,7 @@ import { View, Text } from "react-native";
 import EtapaBasica, { DadosBase } from "./Etapas/EtapaBasica";
 import EtapaEndereco, { DadosEndereco } from "./Etapas/EtapaEndereco";
 import EtapaVacina, { DadosVacina } from "./Etapas/EtapaVacina";
+import Options from "../../components/Options/index";
 
 import { styles } from "./styles";
 
@@ -65,13 +66,18 @@ export default function Cadastro () {
     }
 
     return(
-        <View style={styles.container}>
-            <Text style={styles.titulo}>Cadastro</Text>
-            <Text style={styles.subtitulo}>Entre com os dados do paciente</Text>
-            <View style={styles.campos}>
-                <EtapaAtual/>
+        <View style={{flex: 1}}>
+            <View>
+                <Options screenMeuPerfil="Meu Perfil" screenCadastro="Home"/>
             </View>
-            <View style={styles.linha}/>
+            <View style={styles.container}>
+                <Text style={styles.titulo}>Cadastro</Text>
+                <Text style={styles.subtitulo}>Entre com os dados do paciente</Text>
+                <View style={styles.campos}>
+                    <EtapaAtual/>
+                </View>
+                <View style={styles.linha}/>
+            </View>
         </View>
     );
 }
