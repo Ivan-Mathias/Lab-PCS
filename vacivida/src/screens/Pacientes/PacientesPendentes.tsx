@@ -10,7 +10,7 @@ export default function PacientesPendentes () {
     const [text, setText] = useState('');
     return(
         <SafeAreaView style={{flex: 1}}>
-            <Options screenMeuPerfil="Meu Perfil" screenCadastro="Home"/>
+            <Options screenHome="Home" screenCadastro="Cadastro"/>
             <Text style={styles.titulo}>Pacientes Pendentes</Text>
             <View style={{width: 357, alignSelf: 'center',}}>
                 <Text style={styles.nomeSecao}>Filtre pelo CPF</Text>
@@ -20,7 +20,7 @@ export default function PacientesPendentes () {
                 />
             </View>
             <SafeAreaView style={{flex: 1}}>
-                <ListaPacientes screenDadosPaciente="Meu Perfil"/>     
+                <ListaPacientes screenDadosPaciente="Home"/>     
             </SafeAreaView>
             
             <StatusBar style="dark" />

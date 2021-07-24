@@ -68,7 +68,7 @@ export default function Cadastro () {
     return(
         <View style={{flex: 1}}>
             <View>
-                <Options screenMeuPerfil="Meu Perfil" screenCadastro="Home"/>
+                <Options screenHome="Home" screenCadastro="Cadastro"/>
             </View>
             <View style={styles.container}>
                 <Text style={styles.titulo}>Cadastro</Text>

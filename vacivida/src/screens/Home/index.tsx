@@ -7,25 +7,23 @@ import Options from "../../components/Options/index";
 import { styles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
 
-const MeuPerfilScreen = () => {
+const HomeScreen = () => {
     const navigation = useNavigation();
     return(
         <View>
-            <Options screenMeuPerfil="Meu Perfil" screenCadastro="Home"/>            
-            <Text style={styles.titulo}>Meu Perfil</Text>
-            <View style={styles.secao}>
-                <Text style={styles.nomeSecao}>E-MAIL</Text>
-                <Text style={styles.conteudoSecao}>exemplo@gmail.com</Text>
-            </View>
-            <View style={styles.secao}>
-                <Text style={styles.nomeSecao}>SENHA</Text>
-                <Text style={styles.conteudoSecao}>••••••••••</Text>
-            </View>
+            <Options screenHome="Home" screenCadastro="Cadastro"/>            
+            <Text style={styles.titulo}>Vacivida</Text>
+            <Button style={styles.botaoCadastro}
+                    onPress={() => {navigation.navigate('Cadastro')}}
+                    color="#fff"
+                    labelStyle={styles.botaoContent}
+                    uppercase={false}
+            >Novo Cadastro</Button>
             <View style={styles.secao}>
                 <Text style={styles.nomeSecao}>PACIENTES CADASTRADOS</Text>
                 <View>
                     <Text style={styles.conteudoUnico}>Carregamento completo</Text>
-                    <Button style={{position: 'absolute', top: 4, width: 360, alignSelf: 'center'}}
+                    <Button style={styles.botaoSecudario}
                         children=""
                         contentStyle={{width: 640, flexDirection: 'row-reverse'}}
                         icon={require('../../assets/arrow-right.png')}
@@ -36,7 +34,7 @@ const MeuPerfilScreen = () => {
                 <View>
                     <Text style={styles.conteudoUnico}>Carregamento pendente</Text>
                     <Text style={styles.nPendentes}>27</Text>
-                    <Button style={{position: 'absolute', top: 4, width: 360, alignSelf: 'center'}}
+                    <Button style={styles.botaoSecudario}
                         children=""
                         contentStyle={{width: 640, flexDirection: 'row-reverse'}}
                         icon={require('../../assets/arrow-right.png')}
@@ -50,4 +48,4 @@ const MeuPerfilScreen = () => {
     );
 }
 
-export default MeuPerfilScreen;
+export default HomeScreen;

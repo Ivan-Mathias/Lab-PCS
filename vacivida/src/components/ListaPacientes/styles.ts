@@ -13,5 +13,11 @@ export const styles = StyleSheet.create({
         color: "#000",
         fontSize: 18,
         width: 300
+    },
+    botaoSecudario:{
+        position: 'absolute',
+        top: 4,
+        width: 360,
+        alignSelf: 'center'
     }
 });

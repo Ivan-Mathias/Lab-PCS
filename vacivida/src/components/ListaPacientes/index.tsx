@@ -64,7 +64,7 @@ export default function ListaPacientes ({screenDadosPaciente}: ListaPacientesPro
                 renderItem={({item}) => 
                     <SafeAreaView style={styles.secao}>
                         <Text style={styles.conteudoSecao}>{item.nome}</Text>
-                        <Button style={{position: 'absolute', top: 4, width: 360, alignSelf: 'center'}}
+                        <Button style={styles.botaoSecudario}
                             children=""
                             contentStyle={{width: 640, flexDirection: 'row-reverse'}}
                             icon={require('../../assets/arrow-right.png')}

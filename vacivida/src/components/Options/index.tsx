@@ -6,11 +6,11 @@ import { useNavigation } from "@react-navigation/native";
 import { styles } from "./styles";
 
 type OptionsProps = {
-    screenMeuPerfil: string;
+    screenHome: string;
     screenCadastro: string;
 }
 
-export default function Options ({screenMeuPerfil, screenCadastro}: OptionsProps) {
+export default function Options ({screenHome, screenCadastro}: OptionsProps) {
     const [optionsVisible, setOptionsVisible] = useState(false);
     const navigation = useNavigation();
     return(
@@ -26,7 +26,7 @@ export default function Options ({screenMeuPerfil, screenCadastro}: OptionsProps
                         <Text style={styles.optionsContent}>Meu Perfil</Text>
                         <Button style={{position: 'absolute', width: 180, alignSelf: 'center'}} 
                             children=""
-                            onPress={() => {navigation.navigate(screenMeuPerfil), setOptionsVisible(false);}}
+                            onPress={() => {navigation.navigate(screenHome), setOptionsVisible(false);}}
                             color="#fff"
                             />
                     </View>

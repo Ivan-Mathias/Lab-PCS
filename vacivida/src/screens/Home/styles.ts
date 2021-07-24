@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import theme from '../../global/theme';
 
 export const styles = StyleSheet.create({
     titulo:{
@@ -8,8 +9,6 @@ export const styles = StyleSheet.create({
         marginBottom: 25
     },
     secao:{
-        borderTopColor: "#909090",
-        borderTopWidth: StyleSheet.hairlineWidth,
         marginTop: 20,
         width: 357,
         alignSelf: 'center',
@@ -43,5 +42,23 @@ export const styles = StyleSheet.create({
         color: "#fff",
         textAlign: 'center',
         width: 50,
+    },
+    botaoCadastro:{
+        marginVertical: 60,
+        paddingVertical: 10,
+        width: 240, 
+        alignSelf: 'center',
+        backgroundColor: theme.colors.accent,
+    },
+    botaoContent:{
+        justifyContent: 'center',
+        color: "#fff",
+        fontSize: 24,
+    },
+    botaoSecudario:{
+        position: 'absolute',
+        top: 4,
+        width: 360,
+        alignSelf: 'center'
     }
 });
