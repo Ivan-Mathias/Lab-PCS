@@ -26,5 +26,10 @@ export const styles = StyleSheet.create({
         marginLeft: 16,
         color: "#909090",
         fontSize: 14,
+    },
+    searchIcon:{
+        position: 'absolute',
+        top: 43,
+        left: 310,
     }
 });

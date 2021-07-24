@@ -16,9 +16,9 @@ export default function Routes() {
             <Navigator
                 headerMode="none"
             >
+                <Screen name="Home" component={Home}/>
                 <Screen name="Cadastro" component={Cadastro}/>
                 <Screen name="SignIn" component={Login}/>
-                <Screen name="Home" component={Home}/>
                 <Screen name="Pacientes Carregados" component={PacientesCarregados}/>
                 <Screen name="Pacientes Pendentes" component={PacientesPendentes}/>
             </Navigator>

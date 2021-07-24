@@ -5,6 +5,7 @@ import { Text, View, TextInput, SafeAreaView} from "react-native";
 import Options from "../../components/Options/index";
 import ListaPacientes from "../../components/ListaPacientes/index";
 import { styles } from "./styles";
+import { IconButton } from "react-native-paper";
 
 export default function PacientesPendentes () {
     const [text, setText] = useState('');
@@ -17,6 +18,12 @@ export default function PacientesPendentes () {
                 <TextInput style={styles.busca}
                     onChangeText={text => setText(text)}
                     defaultValue={text}
+                />
+                <IconButton style={styles.searchIcon}
+                    icon={require('../../assets/search.png')}
+                    size = {28}
+                    onPress={() => null}
+                    color="#909090"
                 />
             </View>
             <SafeAreaView style={{flex: 1}}>
