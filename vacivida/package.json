@@ -17,6 +17,8 @@
     "expo-status-bar": "~1.0.4",
     "formik": "^2.2.9",
     "mathjs": "^9.0.0",
+    "tesseract.js": "^2.1.4",
+    "image-js": "^0.31.4",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",

@@ -1,54 +1,26 @@
-import Tesseract from 'tesseract.js';
 import { Component, createRef } from 'react';
-import { ocrKeyLookup } from './ocr.js';
-import { IJStoImage, fileToImage, preprocessDocumentImage } from './imageUtils.js';
-
-const alphaLower = 'aáãàâbcçdeêéfghiíîjklmnoôóöpqrstuúüvwxyz';
-const alphaUpper = alphaLower.toUpperCase();
-const num = '0123456789';
-const punct = '.:-/';
-const space = ' ';
-const VALID_CHARS = alphaLower + alphaUpper + num + punct + space;
+import { OCR } from '../../vacivida/src/image-processing/ocr.js';
 
 /**
- * The main OCS application class.
+ * The main OCR application class.
  */
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      progress: 0,
-      result: null,
-      documentData: {},
-    };
+    this.state = {};
+    this.resetState();
+
+    this.ocr = new OCR();
 
     // Bind the handlePhoto method (needed to ensure that the event handlers work properly)
     this.handlePhoto = this.handlePhoto.bind(this);
 
-    // Create the tesseract worker and configure the worker.
-    this.worker = Tesseract.createWorker({
-      logger: (m) => {
-        // Track progress through log messages
-        if (m.status === 'recognizing text') {
-          this.setState({ progress: m.progress });
-        }
-      },
-      // cacheMethod: 'none',
-    });
-
-    this.workerReady = (async () => {
-      await this.worker.load();
-      await this.worker.loadLanguage('por');
-      await this.worker.initialize('por');
-      await this.worker.setParameters({
-        user_defined_dpi: '70',
-        tessedit_pageseg_mode: Tesseract.PSM.SPARSE_TEXT,
-        tessedit_char_whitelist: VALID_CHARS,
-      });
-    })();
-
     // A reference to the html canvas
     this.canvasRef = createRef();
+  }
+
+  resetState() {
+    this.setState({ progress: 0, result: null, documentData: {} });
   }
 
   /**
@@ -56,48 +28,48 @@ class App extends Component {
    */
   async handlePhoto(e) {
     // Reset the dom
-    this.setState({ progress: 0, result: null, documentData: {} });
-    
+    this.resetState();
+
+    // Prepare the canvas and setup event handlers
     let canvas = this.canvasRef.current;
     let ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Wait until the worker is ready
-    await this.workerReady;
+    this.ocr.onWorkerProgress = (progress) => this.setState({ progress: progress });
 
-    // Load and pre-process the image file
-    let img = await fileToImage(e.target.files[0]);
-    let postImg = preprocessDocumentImage(img);
+    this.ocr.onPreprocessedImage = (postImg) => {
+      // Draw pre-processed image on canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvas.width = postImg.width;
+      canvas.height = postImg.height;
+      ctx.drawImage(postImg, 0, 0);
+    };
 
-    // Draw pre-processed image
-    canvas.width = postImg.width;
-    canvas.height = postImg.height;
-    ctx.drawImage(await IJStoImage(postImg), 0, 0);
+    this.ocr.onOCRResults = (result) => {
+      // Draw boxes
+      ctx.strokeStyle = 'red';
+      ctx.fillStyle = 'red';
+      ctx.textBaseline = 'bottom';
+      ctx.font = '16 px sans-serif';
+      for (let block of result.data.blocks) {
+        let bbox = block.bbox;
+        ctx.strokeRect(bbox.x0, bbox.y0, bbox.x1 - bbox.x0, bbox.y1 - bbox.y0);
+        ctx.fillText('[' + block.confidence.toFixed(0) + '] ' + block.text, bbox.x0, bbox.y0);
+      }
+      console.log('worker.recognize(file)', result);
+      this.setState({ result: result });
+    };
 
-    // Get OCR result
-    let result = await this.worker.recognize(await IJStoImage(postImg));
-    console.log('worker.recognize(file)', result);
-    this.setState({ result: result });
-
-    // Draw boxes
-    ctx.strokeStyle = 'red';
-    ctx.fillStyle = 'red';
-    ctx.textBaseline = 'bottom';
-    ctx.font = '16 px sans-serif';
-    for (let block of result.data.blocks) {
-      let bbox = block.bbox;
-      ctx.strokeRect(bbox.x0, bbox.y0, bbox.x1 - bbox.x0, bbox.y1 - bbox.y0);
-      ctx.fillText('[' + block.confidence.toFixed(0) + '] ' + block.text, bbox.x0, bbox.y0);
-    }
-
+    // Run OCR
+    let documentData = await this.ocr.processFile(e.target.files[0]);
     this.setState({
-      documentData: {
-        Nome: ocrKeyLookup(result.data.blocks, 'Nome', 1)[0],
-        CPF: ocrKeyLookup(result.data.blocks, 'CPF', 1)[0],
-        Filiacao: ocrKeyLookup(result.data.blocks, 'Filiação', 2).join(' e '),
-        'Data de Nascimento': ocrKeyLookup(result.data.blocks, 'Data de Nascimento', 1)[0],
-      },
+      documentData: documentData,
     });
+
+    // Remove event handlers
+    this.ocr.onWorkerProgress = null;
+    this.ocr.onPreprocessedImage = null;
+    this.ocr.onOCRResults = null;
   }
 
   /**
