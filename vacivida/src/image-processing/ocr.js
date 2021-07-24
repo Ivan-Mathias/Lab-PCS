@@ -1,6 +1,7 @@
 import Tesseract from 'tesseract.js';
 import { ocrKeyLookup } from './textLookup.js';
 import { IJStoImage, fileToIJS } from './imageUtils.js';
+import * as perspective from './perspective.js';
 
 const alphaLower = 'aáãàâbcçdeêéfghiíîjklmnoôóöpqrstuúüvwxyz';
 const alphaUpper = alphaLower.toUpperCase();
@@ -69,6 +70,7 @@ export class OCR {
     // Load and pre-process the image file
     let ijs = await fileToIJS(file);
     let postImg = await IJStoImage(preprocessDocumentImage(ijs));
+    postImg = await perspective.main(postImg, [[1,1], [100,100], [10, 200], [300, 1]]);
     if (this.onPreprocessedImage) {
       this.onPreprocessedImage(postImg);
     }
