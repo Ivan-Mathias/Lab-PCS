@@ -1,6 +1,7 @@
-import { useFormik } from 'formik';
 import React from 'react';
-import { View } from 'react-native';
+import { useFormik } from 'formik';
+import * as Yup from 'yup'
+import { View, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import ButtonProgress from '../../../components/ButtonProgress';
 import OutlinedTextInput from '../../../components/OutlinedTextInput';
@@ -42,16 +43,39 @@ function Basica ({ initialValues, handleSubmit }: Etaparops) {
             gestante: false,
             puerpera: false
         },
+        validationSchema: Yup.object({
+            nome: Yup.string().required(),
+            cpf: Yup.number().required(),
+            cns: Yup.number().required(),
+            telefone: Yup.string().required(),
+            nascimento: Yup.string().required(),
+            sexo: Yup.string().test(
+                'string-vazia',
+                'Selecione uma opção',
+                sexo => !sexo || sexo.length !== 0
+            ),
+            raca: Yup.string().test(
+                'string-vazia',
+                'Selecione uma opção',
+                raca => !raca || raca.length !== 0
+            )
+        }),
         onSubmit: (values) => handleSubmit(values)
     })
 
     return (
         <View style={{ flex: 1 }}>
             <ScrollView>
+                {!formik.isValid && (
+                    <Text style={styles.erro}>
+                        Preencha os campos obrigatórios
+                    </Text>
+                )}
                 <View style={styles.linha}>
                     <OutlinedTextInput
                         label="Nome do paciente"
                         value={formik.values.nome}
+                        erro={!!formik.errors.nome && !!formik.touched.nome}
                         onChange={formik.handleChange('nome')}
                     />
                 </View>
@@ -60,6 +84,7 @@ function Basica ({ initialValues, handleSubmit }: Etaparops) {
                         label="CPF"
                         keyboardType="numeric"
                         value={formik.values.cpf}
+                        erro={!!formik.errors.cpf && !!formik.touched.cpf}
                         onChange={formik.handleChange('cpf')}
                     />
                     <View style={styles.espacador}/>
@@ -67,6 +92,7 @@ function Basica ({ initialValues, handleSubmit }: Etaparops) {
                         label="CNS"
                         keyboardType="numeric"
                         value={formik.values.cns}
+                        erro={!!formik.errors.cns && !!formik.touched.cns}
                         onChange={formik.handleChange('cns')}
                     />
                 </View>
@@ -74,6 +100,7 @@ function Basica ({ initialValues, handleSubmit }: Etaparops) {
                     <OutlinedTextInput
                         label="Telefone"
                         value={formik.values.telefone}
+                        erro={!!formik.errors.telefone && !!formik.touched.telefone}
                         keyboardType="numeric"
                         onChange={formik.handleChange('telefone')}
                     />
@@ -81,6 +108,7 @@ function Basica ({ initialValues, handleSubmit }: Etaparops) {
                     <OutlinedTextInput
                         label="Nascimento"
                         value={formik.values.nascimento}
+                        erro={!!formik.errors.nascimento && !!formik.touched.nascimento}
                         onChange={formik.handleChange('nascimento')}
                     />
                 </View>
@@ -88,6 +116,7 @@ function Basica ({ initialValues, handleSubmit }: Etaparops) {
                     <SelectInput
                         label="Sexo"
                         value={formik.values.sexo || ''}
+                        erro={!!formik.errors.sexo && !!formik.touched.sexo}
                         handleChange={formik.handleChange('sexo')}
                         options={SexoValues}
                         getValue={(option) => option}
@@ -96,6 +125,7 @@ function Basica ({ initialValues, handleSubmit }: Etaparops) {
                     <SelectInput
                         label="Raça"
                         value={formik.values.raca || ''}
+                        erro={!!formik.errors.raca && !!formik.touched.raca}
                         handleChange={formik.handleChange('raca')}
                         options={RacaValues}
                         getValue={(option) => option}

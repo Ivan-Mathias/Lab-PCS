@@ -11,7 +11,7 @@ interface ButtonProgressProps {
     onPressPrevious?: () => void;
 }
 
-function ButtonProgress ({ first, onPressNext, onPressPrevious }: ButtonProgressProps) {
+function ButtonProgress ({ first, final = false, onPressNext, onPressPrevious }: ButtonProgressProps) {
     return (
         <View style={styles.container}>
             {first || !onPressPrevious
@@ -25,7 +25,7 @@ function ButtonProgress ({ first, onPressNext, onPressPrevious }: ButtonProgress
             }
             <View style={styles.espacador}/>
             <ButtonStep
-                type="primary"
+                type={final ? 'final' : 'primary'}
                 onPress={onPressNext}
             />
         </View>
