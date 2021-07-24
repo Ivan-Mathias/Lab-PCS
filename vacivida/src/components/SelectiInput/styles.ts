@@ -10,13 +10,13 @@ export default StyleSheet.create({
         marginBottom: 8,
         color: theme.colors.fields.label
     },
+    wrapper: {
+        borderColor :  theme.colors.fields.border,
+        backgroundColor: theme.colors.background,
+        borderWidth: 1,
+        borderRadius: 8
+    },
     picker: {
-        width: '100%',
-        padding: 10,
-        height: 56,
-        // borderColor: theme.colors.backdrop,
-        // borderRadius: theme.roundness,
-        // backgroundColor: theme.colors.background,
-        // borderWidth: 1,
+        height: 56
     }
 })
