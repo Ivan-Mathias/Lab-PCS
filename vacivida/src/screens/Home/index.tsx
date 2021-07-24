@@ -14,11 +14,12 @@ const HomeScreen = () => {
             <Options screenHome="Home" screenCadastro="Cadastro"/>            
             <Text style={styles.titulo}>Vacivida</Text>
             <Button style={styles.botaoCadastro}
+                    children="Novo Cadastro"
                     onPress={() => {navigation.navigate('Cadastro')}}
                     color="#fff"
                     labelStyle={styles.botaoContent}
                     uppercase={false}
-            >Novo Cadastro</Button>
+            />
             <View style={styles.secao}>
                 <Text style={styles.nomeSecao}>PACIENTES CADASTRADOS</Text>
                 <View>
