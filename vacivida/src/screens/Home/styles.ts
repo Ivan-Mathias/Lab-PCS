@@ -15,8 +15,9 @@ export const styles = StyleSheet.create({
     },
     nomeSecao:{
         marginTop: 20,
+        marginBottom: 5,
         marginLeft: 16,
-        color: "#909090",
+        color: theme.colors.fields.label,
         fontSize: 12,
     },
     conteudoSecao:{
@@ -38,7 +39,7 @@ export const styles = StyleSheet.create({
         paddingVertical: 4,
         borderWidth: 0,
         borderRadius: 15,
-        backgroundColor: "#02C532",
+        backgroundColor: theme.colors.accent,
         color: "#fff",
         textAlign: 'center',
         width: 50,

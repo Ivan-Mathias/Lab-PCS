@@ -12,8 +12,8 @@ export default function PacientesCarregados () {
         <SafeAreaView style={{flex: 1}}>
             <Options screenHome="Home" screenCadastro="Cadastro"/>            
             <Text style={styles.titulo}>Pacientes Carregados</Text>
-            <View style={{width: 357, alignSelf: 'center',}}>
-                <Text style={styles.nomeSecao}>Filtre pelo CPF</Text>
+            <View style={{width: 380, alignSelf: 'center'}}>
+                <Text style={styles.nomeSecao}>Filtre pelo nome</Text>
                 <TextInput style={styles.busca}
                     onChangeText={text => setText(text)}
                     defaultValue={text}

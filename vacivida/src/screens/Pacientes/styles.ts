@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import theme from '../../global/theme';
 
 export const styles = StyleSheet.create({
     titulo:{
@@ -12,18 +13,18 @@ export const styles = StyleSheet.create({
     busca:{
         marginTop: 5,
         height: 50,
-        width: 330,
+        width: 360,
         paddingLeft: 20,
         alignSelf: 'center',
-        backgroundColor: '#FAFAFC',
+        backgroundColor: theme.colors.fields.background,
         borderRadius: 6,
         borderWidth: 2,
-        borderColor: "#E6E6F0",
+        borderColor: theme.colors.fields.border,
     },
     nomeSecao:{
         marginTop: 20,
         marginLeft: 16,
         color: "#909090",
-        fontSize: 12,
+        fontSize: 14,
     }
 });
