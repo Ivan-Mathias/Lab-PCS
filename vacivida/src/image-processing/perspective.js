@@ -74,7 +74,7 @@ export function getPerspectiveTransform(src, dst) {
         A.push(aux_A);
         b.push(aux_b);
 
-        aux_A = [-x, -y, -1, 0, 0, 0, Py * x, Py * y];
+        aux_A = [0, 0, 0, -x, -y, -1,Py * x, Py * y];
         aux_b = -Py;
 
         A.push(aux_A);

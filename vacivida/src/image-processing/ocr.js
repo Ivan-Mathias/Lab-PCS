@@ -66,11 +66,11 @@ export class OCR {
   /**
    * Event handler for when a new file is added.
    */
-  async processFile(file) {
+  async processFile(file, points) {
     // Load and pre-process the image file
     let ijs = await fileToIJS(file);
     let postImg = await IJStoImage(preprocessDocumentImage(ijs));
-    postImg = await perspective.main(postImg, [[1,1], [100,100], [10, 200], [300, 1]]);
+    postImg = await perspective.main(postImg, points);
     if (this.onPreprocessedImage) {
       this.onPreprocessedImage(postImg);
     }
