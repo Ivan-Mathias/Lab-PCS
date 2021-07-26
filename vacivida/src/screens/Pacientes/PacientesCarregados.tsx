@@ -11,7 +11,7 @@ export default function PacientesCarregados () {
     const [text, setText] = useState('');
     return(
         <SafeAreaView style={{flex: 1}}>
-            <Options screenHome="Home" screenCadastro="Cadastro"/>            
+            <Options/>            
             <Text style={styles.titulo}>Pacientes Carregados</Text>
             <View style={{width: 380, alignSelf: 'center'}}>
                 <Text style={styles.nomeSecao}>Filtre pelo nome</Text>
@@ -27,7 +27,7 @@ export default function PacientesCarregados () {
                 />
             </View>
             <SafeAreaView style={{flex: 1}}>
-                <ListaPacientes screenDadosPaciente="Home"/>     
+                <ListaPacientes/>     
             </SafeAreaView>
             
             <StatusBar style="dark" />

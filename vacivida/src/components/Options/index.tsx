@@ -5,12 +5,7 @@ import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { styles } from "./styles";
 
-type OptionsProps = {
-    screenHome: string;
-    screenCadastro: string;
-}
-
-export default function Options ({screenHome, screenCadastro}: OptionsProps) {
+export default function Options () {
     const [optionsVisible, setOptionsVisible] = useState(false);
     const navigation = useNavigation();
     return(
@@ -26,7 +21,7 @@ export default function Options ({screenHome, screenCadastro}: OptionsProps) {
                         <Text style={styles.optionsContent}>Meu Perfil</Text>
                         <Button style={{position: 'absolute', width: 180, alignSelf: 'center'}} 
                             children=""
-                            onPress={() => {navigation.navigate(screenHome), setOptionsVisible(false);}}
+                            onPress={() => {navigation.navigate("Home"), setOptionsVisible(false);}}
                             color="#fff"
                             />
                     </View>
@@ -34,7 +29,7 @@ export default function Options ({screenHome, screenCadastro}: OptionsProps) {
                         <Text style={styles.optionsContent}>Novo cadastro</Text>
                         <Button style={{position: 'absolute', width: 180, alignSelf: 'center'}}
                             children=""
-                            onPress={() => {navigation.navigate(screenCadastro), setOptionsVisible(false)}}
+                            onPress={() => {navigation.navigate("Cadastro"), setOptionsVisible(false)}}
                             color="#fff"
                             />
                     </View>

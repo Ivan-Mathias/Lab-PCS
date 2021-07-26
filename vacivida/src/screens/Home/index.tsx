@@ -11,7 +11,7 @@ const HomeScreen = () => {
     const navigation = useNavigation();
     return(
         <View>
-            <Options screenHome="Home" screenCadastro="Cadastro"/>            
+            <Options/>            
             <Text style={styles.titulo}>Vacivida</Text>
             <Button style={styles.botaoCadastro}
                     children="Novo Cadastro"

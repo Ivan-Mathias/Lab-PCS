@@ -5,11 +5,8 @@ import { Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { styles } from "./styles";
 
-type ListaPacientesProps = {
-    screenDadosPaciente: string;
-}
 
-export default function ListaPacientes ({screenDadosPaciente}: ListaPacientesProps) {
+export default function ListaPacientes () {
     const navigation = useNavigation();
     return(
         <SafeAreaView style={{paddingVertical: 20}}>
@@ -68,7 +65,7 @@ export default function ListaPacientes ({screenDadosPaciente}: ListaPacientesPro
                             children=""
                             contentStyle={{width: 640, flexDirection: 'row-reverse'}}
                             icon={require('../../assets/arrow-right.png')}
-                            onPress={() => navigation.navigate(screenDadosPaciente)}
+                            onPress={() => navigation.navigate("Home")}
                             color="#909090"
                         />
                     </SafeAreaView>
