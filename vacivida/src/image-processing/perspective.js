@@ -1,5 +1,5 @@
 import * as math from 'mathjs';
-import { canvasToImage } from './imageUtils.js';
+import { toHTMLImage } from './imageUtils.js';
 
 /**
  *
@@ -90,7 +90,7 @@ export function getPerspectiveTransform(src, dst) {
 
 /**
  *
- * @param {Image} canvas
+ * @param {HTMLImageElement} canvas
  * @param {Array<Array<number>>} M
  * @param {Array<number>} new_shape
  * @returns {Promise<Image>}
@@ -124,7 +124,7 @@ export function perspectiveWarp(img, M, new_shape) {
         }
     }
 
-    return canvasToImage(warped);
+    return toHTMLImage(warped);
 }
 
 /**
@@ -163,7 +163,7 @@ export function createDstArray(shape) {
 
 /**
  *
- * @param {Image} img
+ * @param {HTMLImageElement} img
  * @param {Array<[number,number]>} points
  * @returns {Promise<Image>}
  */

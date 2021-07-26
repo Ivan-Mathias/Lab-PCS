@@ -1,4 +1,5 @@
 import { Component, createRef } from 'react';
+import { toHTMLImage } from '../../vacivida/src/image-processing/imageUtils.js';
 import { OCR } from '../../vacivida/src/image-processing/ocr.js';
 
 /**
@@ -61,7 +62,8 @@ class App extends Component {
         };
 
         // Run OCR
-        let documentData = await this.ocr.processFile(e.target.files[0], [
+        let img = await toHTMLImage(e.target.files[0]);
+        let documentData = await this.ocr.processFile(img, [
             [1, 1],
             [2, 100],
             [100, 110],
