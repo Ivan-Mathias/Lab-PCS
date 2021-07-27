@@ -74,7 +74,7 @@ export function getPerspectiveTransform(src, dst) {
         A.push(aux_A);
         b.push(aux_b);
 
-        aux_A = [0, 0, 0, -x, -y, -1,Py * x, Py * y];
+        aux_A = [0, 0, 0, -x, -y, -1, Py * x, Py * y];
         aux_b = -Py;
 
         A.push(aux_A);
@@ -90,41 +90,37 @@ export function getPerspectiveTransform(src, dst) {
 
 /**
  *
- * @param {HTMLImageElement} canvas
+ * @param {Uint8Array} imgData
+ * @param {number} width
  * @param {Array<Array<number>>} M
  * @param {Array<number>} new_shape
- * @returns {Promise<Image>}
+ * @returns {[Uint8Array, number]}
  */
-export function perspectiveWarp(img, M, new_shape) {
+export function perspectiveWarp(imgData, width, M, new_shape) {
     let [h, w] = new_shape;
     let M_inv = math.inv(M);
 
-    let original = document.createElement('canvas');
-    let originalCtx = original.getContext('2d');
-    original.width = img.width;
-    original.height = img.height;
-    originalCtx.drawImage(img, 0, 0);
+    let originalPixels = new Uint32Array(imgData.buffer);
+    let warpedPixels = new Uint32Array(w * h);
 
-    let warped = document.createElement('canvas');
-    let warpedCtx = warped.getContext('2d');
-    warped.height = h;
-    warped.width = w;
+    for (let Py = 0; Py < h; Py++) {
+        for (let Px = 0; Px < w; Px++) {
+            // let w_ = 1 / math.multiply(M_inv[2], [Px, Py, 1]);
+            // let P_warped = [[Px * w_], [Py * w_], [w_]];
 
-    for (let Px = 0; Px < w; Px++) {
-        for (let Py = 0; Py < h; Py++) {
-            let w_ = 1 / math.multiply(M_inv[2], [Px, Py, 1]);
-            let P_warped = [[Px * w_], [Py * w_], [w_]];
+            // let p = math.multiply(M_inv, P_warped);
+            // let x = Math.round(p[0][0]);
+            // let y = Math.round(p[1][0]);
 
-            let p = math.multiply(M_inv, P_warped);
-            let x = Math.round(p[0][0]);
-            let y = Math.round(p[1][0]);
+            let w_ = 1 / (M_inv[2][0] * Px + M_inv[2][1] * Py + M_inv[2][2]);
+            let x = Math.round((M_inv[0][0] * Px + M_inv[0][1] * Py + M_inv[0][2]) * w_);
+            let y = Math.round((M_inv[1][0] * Px + M_inv[1][1] * Py + M_inv[1][2]) * w_);
 
-            let data = originalCtx.getImageData(x, y, 1, 1);
-            warpedCtx.putImageData(data, Px, Py);
+            warpedPixels[w * Py + Px] = originalPixels[width * y + x];
         }
     }
 
-    return toHTMLImage(warped);
+    return [new Uint8Array(warpedPixels.buffer), w];
 }
 
 /**
@@ -163,11 +159,11 @@ export function createDstArray(shape) {
 
 /**
  *
- * @param {HTMLImageElement} img
+ * @param {Uint8Array} img
  * @param {Array<[number,number]>} points
- * @returns {Promise<Image>}
+ * @returns {[Uint8Array, number]}
  */
-export function main(img, points) {
+export function main(imgData, width, points) {
     points = orderPoints(points);
 
     let newShape = getShape(points);
@@ -175,5 +171,5 @@ export function main(img, points) {
     let dst = createDstArray(newShape);
 
     let M = getPerspectiveTransform(points, dst);
-    return perspectiveWarp(img, M, newShape);
+    return perspectiveWarp(imgData, width, M, newShape);
 }
