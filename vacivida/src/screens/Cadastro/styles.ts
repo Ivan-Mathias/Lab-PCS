@@ -23,6 +23,13 @@ export const styles = StyleSheet.create({
     campos: {
         flex: 1
     },
+    erro: {
+        fontSize: 18,
+        color: theme.colors.error,
+        textAlign: 'center',
+        marginTop: -6,
+        marginBottom: 20
+    },
     linha: {
         flexDirection: 'row',
         marginBottom: 12

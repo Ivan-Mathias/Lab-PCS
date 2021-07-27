@@ -1,6 +1,7 @@
-import { useFormik } from 'formik';
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { useFormik } from 'formik';
+import * as Yup from 'yup'
+import { ScrollView, View, Text } from 'react-native';
 import ButtonProgress from '../../../components/ButtonProgress';
 import OutlinedTextInput from '../../../components/OutlinedTextInput';
 import SwitchInput from '../../../components/SwitchInput';
@@ -29,22 +30,35 @@ function Vacina ({ initialValues, handleVoltar, handleSubmit }: EtapaVacinaProps
             segundaDose: false,
             lote: 0
         },
+        validationSchema: Yup.object({
+            imunobiologico: Yup.string().required(),
+            data: Yup.string().required(),
+            segundaDose: Yup.boolean(),
+            lote: Yup.number().positive().required()
+        }),
         onSubmit: (values) => handleSubmit(values)
     })
 
     return (
         <View style={{ flex: 1 }}>
             <ScrollView>
+                {!formik.isValid && (
+                    <Text style={styles.erro}>
+                        Preencha os campos obrigatórios
+                    </Text>
+                )}
                 <View style={styles.linha}>
                     <OutlinedTextInput
                         label="Imunobiológico"
                         value={formik.values.imunobiologico}
+                        erro={!!formik.errors.imunobiologico && !!formik.touched.imunobiologico}
                         onChange={formik.handleChange('imunobiologico')}
                         />
                     <View style={styles.espacador}/>
                     <OutlinedTextInput
                         label="Data da aplicação"
                         value={formik.values.data}
+                        erro={!!formik.errors.data && !!formik.touched.data}
                         onChange={formik.handleChange('data')}
                         />
                 </View>
@@ -59,6 +73,7 @@ function Vacina ({ initialValues, handleVoltar, handleSubmit }: EtapaVacinaProps
                         label="Lote"
                         keyboardType="numeric"
                         value={formik.values.lote}
+                        erro={!!formik.errors.lote && !!formik.touched.lote}
                         onChange={formik.handleChange('lote')}
                         />
                 </View>
