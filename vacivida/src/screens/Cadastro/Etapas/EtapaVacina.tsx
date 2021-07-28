@@ -9,6 +9,7 @@ import { styles } from '../styles';
 
 interface EtapaVacinaProps {
     initialValues?: DadosVacina;
+    viewOnly?: boolean;
     handleVoltar: () => void;
     handleSubmit: (dados: DadosVacina) => void;
 }
@@ -20,7 +21,7 @@ export type DadosVacina = {
     lote: number;
 }
 
-function Vacina ({ initialValues, handleVoltar, handleSubmit }: EtapaVacinaProps) {
+function Vacina ({ initialValues, viewOnly = false, handleVoltar, handleSubmit }: EtapaVacinaProps) {
     const formik = useFormik({
         initialValues: initialValues
         ? initialValues
@@ -50,6 +51,7 @@ function Vacina ({ initialValues, handleVoltar, handleSubmit }: EtapaVacinaProps
                 <View style={styles.linha}>
                     <OutlinedTextInput
                         label="Imunobiológico"
+                        viewOnly={viewOnly}
                         value={formik.values.imunobiologico}
                         erro={!!formik.errors.imunobiologico && !!formik.touched.imunobiologico}
                         onChange={formik.handleChange('imunobiologico')}
@@ -57,6 +59,7 @@ function Vacina ({ initialValues, handleVoltar, handleSubmit }: EtapaVacinaProps
                     <View style={styles.espacador}/>
                     <OutlinedTextInput
                         label="Data da aplicação"
+                        viewOnly={viewOnly}
                         value={formik.values.data}
                         erro={!!formik.errors.data && !!formik.touched.data}
                         onChange={formik.handleChange('data')}
@@ -65,25 +68,27 @@ function Vacina ({ initialValues, handleVoltar, handleSubmit }: EtapaVacinaProps
                 <View style={styles.linha}>
                     <SwitchInput
                         label="2ª dose"
+                        viewOnly={viewOnly}
                         value={formik.values.segundaDose}
                         toggleSwitch={() => formik.setFieldValue('segundaDose', !formik.values.segundaDose)}
                     />
                     <View style={styles.espacador}/>
                     <OutlinedTextInput
                         label="Lote"
+                        viewOnly={viewOnly}
                         keyboardType="numeric"
                         value={formik.values.lote}
                         erro={!!formik.errors.lote && !!formik.touched.lote}
                         onChange={formik.handleChange('lote')}
                     />
                 </View>
-                <ButtonProgress
-                    final
-                    error={false}
-                    onPressNext={formik.submitForm}
-                    onPressPrevious={handleVoltar}
-                />
             </ScrollView>
+            <ButtonProgress
+                final
+                error={false}
+                onPressNext={formik.submitForm}
+                onPressPrevious={handleVoltar}
+            />
         </View>
     );
 }

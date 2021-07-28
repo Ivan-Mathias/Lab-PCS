@@ -8,6 +8,7 @@ import { styles } from '../styles';
 
 interface EtapaEnderecoProps {
     initialValues?: DadosEndereco;
+    viewOnly?: boolean;
     handleVoltar: () => void;
     handleSubmit: (dados: DadosEndereco) => void;
 }
@@ -26,7 +27,7 @@ export type DadosEndereco = {
     email: string;
 }
 
-function Endereco ({ initialValues, handleVoltar, handleSubmit }: EtapaEnderecoProps) {
+function Endereco ({ initialValues, viewOnly = false, handleVoltar, handleSubmit }: EtapaEnderecoProps) {
     const formik = useFormik({
         initialValues: initialValues
         ? initialValues
@@ -70,6 +71,7 @@ function Endereco ({ initialValues, handleVoltar, handleSubmit }: EtapaEnderecoP
                 <View style={styles.linha}>
                     <OutlinedTextInput
                         label="Nome social"
+                        viewOnly={viewOnly}
                         value={formik.values.nomeSocial}
                         erro={!!formik.errors.nomeSocial && !!formik.touched.nomeSocial}
                         onChange={formik.handleChange('nomeSocial')}
@@ -78,6 +80,7 @@ function Endereco ({ initialValues, handleVoltar, handleSubmit }: EtapaEnderecoP
                 <View style={styles.linha}>
                     <OutlinedTextInput
                         label="Nome da mãe"
+                        viewOnly={viewOnly}
                         value={formik.values.nomeDaMae}
                         erro={!!formik.errors.nomeDaMae && !!formik.touched.nomeDaMae}
                         onChange={formik.handleChange('nomeDaMae')}
@@ -86,6 +89,7 @@ function Endereco ({ initialValues, handleVoltar, handleSubmit }: EtapaEnderecoP
                 <View style={styles.linha}>
                     <OutlinedTextInput
                         label="País"
+                        viewOnly={viewOnly}
                         value={formik.values.pais}
                         erro={!!formik.errors.pais && !!formik.touched.pais}
                         onChange={formik.handleChange('pais')}
@@ -93,6 +97,7 @@ function Endereco ({ initialValues, handleVoltar, handleSubmit }: EtapaEnderecoP
                     <View style={styles.espacador}/>
                     <OutlinedTextInput
                         label="UF"
+                        viewOnly={viewOnly}
                         value={formik.values.uf}
                         erro={!!formik.errors.uf && !!formik.touched.uf}
                         onChange={formik.handleChange('uf')}
@@ -101,6 +106,7 @@ function Endereco ({ initialValues, handleVoltar, handleSubmit }: EtapaEnderecoP
                 <View style={styles.linha}>
                     <OutlinedTextInput
                         label="Município"
+                        viewOnly={viewOnly}
                         value={formik.values.municipio}
                         erro={!!formik.errors.municipio && !!formik.touched.municipio}
                         onChange={formik.handleChange('municipio')}
@@ -108,6 +114,7 @@ function Endereco ({ initialValues, handleVoltar, handleSubmit }: EtapaEnderecoP
                     <View style={styles.espacador}/>
                     <OutlinedTextInput
                         label="Zona"
+                        viewOnly={viewOnly}
                         value={formik.values.zona}
                         erro={!!formik.errors.zona && !!formik.touched.zona}
                         onChange={formik.handleChange('zona')}
@@ -116,6 +123,7 @@ function Endereco ({ initialValues, handleVoltar, handleSubmit }: EtapaEnderecoP
                 <View style={styles.linha}>
                     <OutlinedTextInput
                         label="Logradouro"
+                        viewOnly={viewOnly}
                         value={formik.values.logradouro}
                         erro={!!formik.errors.logradouro && !!formik.touched.logradouro}
                         onChange={formik.handleChange('logradouro')}
@@ -123,6 +131,7 @@ function Endereco ({ initialValues, handleVoltar, handleSubmit }: EtapaEnderecoP
                     <View style={styles.espacador}/>
                     <OutlinedTextInput
                         label="Número"
+                        viewOnly={viewOnly}
                         keyboardType="numeric"
                         value={formik.values.numero}
                         erro={!!formik.errors.numero && !!formik.touched.numero}
@@ -132,6 +141,7 @@ function Endereco ({ initialValues, handleVoltar, handleSubmit }: EtapaEnderecoP
                 <View style={styles.linha}>
                     <OutlinedTextInput
                         label="Bairro"
+                        viewOnly={viewOnly}
                         value={formik.values.bairro}
                         erro={!!formik.errors.bairro && !!formik.touched.bairro}
                         onChange={formik.handleChange('bairro')}
@@ -139,6 +149,7 @@ function Endereco ({ initialValues, handleVoltar, handleSubmit }: EtapaEnderecoP
                     <View style={styles.espacador}/>
                     <OutlinedTextInput
                         label="Complemento"
+                        viewOnly={viewOnly}
                         value={formik.values.complemento || ''}
                         erro={!!formik.errors.complemento && !!formik.touched.complemento}
                         onChange={formik.handleChange('complemento')}
@@ -147,6 +158,7 @@ function Endereco ({ initialValues, handleVoltar, handleSubmit }: EtapaEnderecoP
                 <View style={styles.linha}>
                     <OutlinedTextInput
                         label="E-mail"
+                        viewOnly={viewOnly}
                         value={formik.values.email}
                         erro={!!formik.errors.email && !!formik.touched.email}
                         keyboardType="email-address"

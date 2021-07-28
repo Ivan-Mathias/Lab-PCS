@@ -7,10 +7,10 @@ export type Paciente = {
     nascimento: string,
     sexo: string,
     raca: string,
-    gestante: string,
-    puerpera: string,
-    nome_social: string,
-    nome_da_mae: string,
+    gestante: boolean,
+    puerpera: boolean,
+    nomeSocial: string,
+    nomeDaMae: string,
     pais: string,
     uf: string,
     municipio: string,
@@ -22,7 +22,7 @@ export type Paciente = {
     email: string,
     imunobiologico: string,
     data: string,
-    segunda_dose: string,
+    segundaDose: boolean,
     lote: number
 }
 

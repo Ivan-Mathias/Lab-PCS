@@ -20,6 +20,7 @@ export default function ListaPacientes ({ pacientes }: ListaPacientesProps) {
                         key: paciente.id.toString(),
                         nome: paciente.nome,
                         pendente: true,
+                        dados: paciente
                     }
                 })}
                 renderItem={({item}) =>
@@ -29,7 +30,7 @@ export default function ListaPacientes ({ pacientes }: ListaPacientesProps) {
                             children=""
                             contentStyle={{width: 640, flexDirection: 'row-reverse'}}
                             icon={require('../../assets/arrow-right.png')}
-                            onPress={() => navigation.navigate("Home")}
+                            onPress={() => navigation.navigate("Paciente", { dados: item.dados })}
                             color="#909090"
                         />
                     </SafeAreaView>
