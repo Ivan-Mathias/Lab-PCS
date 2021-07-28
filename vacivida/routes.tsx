@@ -8,6 +8,7 @@ import Login from "./src/screens/Login";
 import Home from "./src/screens/Home";
 import PacientesPendentes from "./src/screens/Pacientes/PacientesPendentes";
 import PacientesCarregados from "./src/screens/Pacientes/PacientesCarregados";
+import Paciente from "./src/screens/Paciente";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -21,6 +22,7 @@ export default function Routes() {
                 <Screen name="Cadastro" component={Cadastro}/>
                 <Screen name="Camera" component={Camera}/>
                 <Screen name="SignIn" component={Login}/>
+                <Screen name="Paciente" component={Paciente}/>
                 <Screen name="Pacientes Carregados" component={PacientesCarregados}/>
                 <Screen name="Pacientes Pendentes" component={PacientesPendentes}/>
             </Navigator>

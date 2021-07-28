@@ -1,14 +1,39 @@
 import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { Text, View, TextInput, SafeAreaView} from "react-native";
 import Options from "../../components/Options/index";
 import ListaPacientes from "../../components/ListaPacientes/index";
 import { styles } from "./styles";
 import { IconButton } from "react-native-paper";
+import * as SQLite from 'expo-sqlite';
+import Paciente from "../../types/paciente";
+const db = SQLite.openDatabase('dados.db');
 
 export default function PacientesPendentes () {
     const [text, setText] = useState('');
+    const [pacientes, setPacientes] = useState<Paciente[]>([]);
+
+    function loadDados () {
+
+        db.transaction(trx => {
+            trx.executeSql(
+                'SELECT * FROM Pacientes',
+                [],
+                (_, { rows }) => {
+                    const values = [];
+                    for (let i = 0; i < rows.length; i++) {
+                        values.push(rows.item(i));
+                    }
+                    setPacientes(values)
+                });
+        })
+    }
+
+    useEffect(() => {
+        loadDados();
+    }, []);
+
     return(
         <SafeAreaView style={{flex: 1}}>
             <Options/>
@@ -27,9 +52,9 @@ export default function PacientesPendentes () {
                 />
             </View>
             <SafeAreaView style={{flex: 1}}>
-                <ListaPacientes/>     
+                <ListaPacientes pacientes={pacientes}/>
             </SafeAreaView>
-            
+
             <StatusBar style="dark" />
         </SafeAreaView>
     );

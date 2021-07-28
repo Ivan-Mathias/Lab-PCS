@@ -7,16 +7,18 @@ import styles from './styles';
 interface SwitchInputProps {
     label: string;
     value?: boolean;
+    viewOnly?: boolean;
     toggleSwitch: (value: boolean) => void;
 }
 
-function SwitchInput ({ label, value, toggleSwitch }: SwitchInputProps) {
+function SwitchInput ({ label, value, viewOnly = false, toggleSwitch }: SwitchInputProps) {
     return (
-        <RectButton style={styles.container}
+        <RectButton enabled={!viewOnly} style={styles.container}
             onPress={toggleSwitch}
         >
             <Text>{label}</Text>
             <Switch
+                disabled={viewOnly}
                 value={value}
                 onValueChange={(value) => toggleSwitch(value)}
             />

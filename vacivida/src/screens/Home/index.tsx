@@ -1,17 +1,42 @@
 import "react-native-gesture-handler"
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, View} from "react-native";
 import { Button } from "react-native-paper";
 import Options from "../../components/Options/index";
 import { styles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
+import * as SQLite from 'expo-sqlite';
+import { useState } from "react";
+
+const db = SQLite.openDatabase('dados.db');
 
 const HomeScreen = () => {
     const navigation = useNavigation();
+    const [pendentes, setPendentes] = useState(0);
+
+    function loadDados () {
+
+        db.transaction(trx => {
+            trx.executeSql(
+                'SELECT * FROM Pacientes',
+                [],
+                (_, { rows }) => setPendentes(rows.length));
+            // trx.executeSql('DROP TABLE Pacientes');
+        })
+    }
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            loadDados();
+        });
+
+        return unsubscribe;
+    }, [navigation]);
+
     return(
         <View>
-            <Options/>            
+            <Options/>
             <Text style={styles.titulo}>Vacivida</Text>
             <Button style={styles.botaoCadastro}
                     children="Novo Cadastro"
@@ -41,7 +66,7 @@ const HomeScreen = () => {
                 </View>
                 <View>
                     <Text style={styles.conteudoUnico}>Carregamento pendente</Text>
-                    <Text style={styles.nPendentes}>27</Text>
+                    <Text style={styles.nPendentes}>{pendentes}</Text>
                     <Button style={styles.botaoSecudario}
                         children=""
                         contentStyle={{width: 640, flexDirection: 'row-reverse'}}
