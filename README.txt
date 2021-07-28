@@ -63,3 +63,18 @@ navegador web: "Expo Developer Tools" e uma tela com o aplicativo
 
 Obs: preferencialmente, não utilize o Mozilla Firefox pois ele
 pode não interagir corretamente com a sua câmera.
+
+Testes
+------
+Para verificar o envio dos arquivos ao servidor do vacivida, basta
+rodar o seguinte comando num outro terminal, a partir do diretório
+raiz do nosso repositório:
+
+    node tools/test_server.js
+
+Esse programa simula o servidor de homologação que recebe os
+arquivos JSON. A cada arquivo recebido será impressa uma mensagem
+no terminal com o conteúdo completo do arquivo. Para fins de inspeção,
+todas as mensagens impressas no terminal são também salvas
+no diretório "test_logs" (o nome do arquivo é informado pelo
+programa no início de sua execução).
