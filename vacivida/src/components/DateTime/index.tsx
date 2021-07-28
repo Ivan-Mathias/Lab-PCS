@@ -9,9 +9,9 @@ export default function  DateTime() {
   const [show, setShow] = useState(false);
   return (
     <View>
-      <View>
+      <View style={{justifyContent: 'center'}}>
         <Button children="" color="#909090" onPress={() => {setShow(true)}}/>
-        <Text style={{position: 'absolute'}}>{date.getDate()}/{date.getMonth()}/{date.getUTCFullYear()}</Text>
+        <Text style={{position: 'absolute', marginLeft: 10}}>{date.getDate()}/{date.getMonth()}/{date.getUTCFullYear()}</Text>
       </View>
       {show && (
         <DateTimePicker
