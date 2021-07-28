@@ -53,14 +53,14 @@ function Vacina ({ initialValues, handleVoltar, handleSubmit }: EtapaVacinaProps
                         value={formik.values.imunobiologico}
                         erro={!!formik.errors.imunobiologico && !!formik.touched.imunobiologico}
                         onChange={formik.handleChange('imunobiologico')}
-                        />
+                    />
                     <View style={styles.espacador}/>
                     <OutlinedTextInput
                         label="Data da aplicação"
                         value={formik.values.data}
                         erro={!!formik.errors.data && !!formik.touched.data}
                         onChange={formik.handleChange('data')}
-                        />
+                    />
                 </View>
                 <View style={styles.linha}>
                     <SwitchInput
@@ -75,15 +75,15 @@ function Vacina ({ initialValues, handleVoltar, handleSubmit }: EtapaVacinaProps
                         value={formik.values.lote}
                         erro={!!formik.errors.lote && !!formik.touched.lote}
                         onChange={formik.handleChange('lote')}
-                        />
+                    />
                 </View>
+                <ButtonProgress
+                    final
+                    error={false}
+                    onPressNext={formik.submitForm}
+                    onPressPrevious={handleVoltar}
+                />
             </ScrollView>
-            <ButtonProgress
-                final
-                error={false}
-                onPressNext={formik.submitForm}
-                onPressPrevious={handleVoltar}
-            />
         </View>
     );
 }

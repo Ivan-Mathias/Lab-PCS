@@ -144,12 +144,12 @@ function Basica ({ initialValues, handleSubmit }: Etaparops) {
                         toggleSwitch={() => formik.setFieldValue('puerpera', !formik.values.puerpera)}
                     />
                 </View>
+                <ButtonProgress
+                    first
+                    error={false}
+                    onPressNext={formik.submitForm}
+                />
             </ScrollView>
-            <ButtonProgress
-                first
-                error={false}
-                onPressNext={formik.submitForm}
-            />
         </View>
     );
 }

@@ -153,12 +153,12 @@ function Endereco ({ initialValues, handleVoltar, handleSubmit }: EtapaEnderecoP
                         onChange={formik.handleChange('email')}
                         />
                 </View>
+                <ButtonProgress
+                    error={false}
+                    onPressNext={formik.submitForm}
+                    onPressPrevious={handleVoltar}
+                />
             </ScrollView>
-            <ButtonProgress
-                error={false}
-                onPressNext={formik.submitForm}
-                onPressPrevious={handleVoltar}
-            />
         </View>
     );
 }
