@@ -6,6 +6,7 @@ import { Button } from "react-native-paper";
 import Options from "../../components/Options/index";
 import { styles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
+import DateTime from "../../components/DateTime";
 
 const HomeScreen = () => {
     const navigation = useNavigation();
@@ -21,6 +22,7 @@ const HomeScreen = () => {
                     uppercase={false}
             />
             <View style={styles.secao}>
+                <DateTime/>
                 <Text style={styles.nomeSecao}>PACIENTES CADASTRADOS</Text>
                 <View>
                     <Text style={styles.conteudoUnico}>Carregamento completo</Text>
