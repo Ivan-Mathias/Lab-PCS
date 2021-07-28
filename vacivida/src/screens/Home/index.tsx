@@ -20,6 +20,13 @@ const HomeScreen = () => {
                     labelStyle={styles.botaoContent}
                     uppercase={false}
             />
+            <Button style={styles.botaoFoto}
+                    children="Foto de Documento"
+                    onPress={() => {navigation.navigate('Camera')}}
+                    color="#fff"
+                    labelStyle={styles.botaoContent}
+                    uppercase={false}
+            />
             <View style={styles.secao}>
                 <Text style={styles.nomeSecao}>PACIENTES CADASTRADOS</Text>
                 <View>
