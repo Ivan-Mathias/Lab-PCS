@@ -19,36 +19,9 @@ export default function Cadastro({ route: { params } }: CadastroProps) {
     const db = SQLite.openDatabase('dados.db');
     const navigation = useNavigation();
     const [etapa, setEtapa] = useState(0);
-    const [dadosBase, setDadosBase] = useState<DadosBase>({
-        nome: 'Ivanzao',
-        cpf: 78923465,
-        cns: 2390847,
-        telefone: 2038947,
-        nascimento: '23089',
-        sexo: 'Masculino',
-        raca: 'Branco',
-        gestante: false,
-        puerpera: false
-    });
-    const [dadosEndereco, setDadosEndereco] = useState<DadosEndereco>({
-        nomeSocial: '',
-        nomeDaMae: 'Josefina',
-        pais: 'Brasil',
-        uf: 'SP',
-        municipio: 'São Paulo',
-        zona: 'rural',
-        logradouro: 'Rua Pedro Afonso',
-        numero: 2345,
-        bairro: 'perdizes',
-        complemento: '',
-        email: 'pintomole@gmail.com'
-    });
-    const [dadosVacina, setDadosVacina] = useState<DadosVacina>({
-        imunobiologico: 'astrazeneca',
-        data: '12/03/2021',
-        segundaDose: false,
-        lote: 2345
-    });
+    const [dadosBase, setDadosBase] = useState<DadosBase>();
+    const [dadosEndereco, setDadosEndereco] = useState<DadosEndereco>();
+    const [dadosVacina, setDadosVacina] = useState<DadosVacina>();
     const [enviar, setEnviar] = useState(false);
 
     if (params != null && params.dados != null && dadosBase === undefined) {
@@ -139,10 +112,10 @@ export default function Cadastro({ route: { params } }: CadastroProps) {
                 municipio, zona, logradouro, numero, bairro, complemento, \
                 email, imunobiologico, data, segundaDose, lote) \
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                [dadosBase.nome, dadosBase.cpf, dadosBase.cns, dadosBase.telefone, dadosBase.nascimento, dadosBase.sexo, dadosBase.raca,
-                dadosBase.gestante, dadosBase.puerpera, dadosEndereco.nomeSocial, dadosEndereco.nomeDaMae, dadosEndereco.pais, dadosEndereco.uf,
-                dadosEndereco.municipio, dadosEndereco.zona, dadosEndereco.logradouro, dadosEndereco.numero, dadosEndereco.bairro,
-                dadosEndereco.complemento, dadosEndereco.email, dadosVacina.imunobiologico, dadosVacina.data, dadosVacina.segundaDose, dadosVacina.lote],
+                [dadosBase?.nome, dadosBase?.cpf, dadosBase?.cns, dadosBase?.telefone, dadosBase?.nascimento, dadosBase?.sexo, dadosBase?.raca,
+                dadosBase?.gestante, dadosBase?.puerpera, dadosEndereco?.nomeSocial, dadosEndereco?.nomeDaMae, dadosEndereco?.pais, dadosEndereco?.uf,
+                dadosEndereco?.municipio, dadosEndereco?.zona, dadosEndereco?.logradouro, dadosEndereco?.numero, dadosEndereco?.bairro,
+                dadosEndereco?.complemento, dadosEndereco?.email, dadosVacina?.imunobiologico, dadosVacina?.data, dadosVacina?.segundaDose, dadosVacina?.lote],
                 result => console.log(result)
             );
             navigation.navigate("Home")
