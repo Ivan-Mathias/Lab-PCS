@@ -7,6 +7,7 @@ import theme from '../../global/theme';
 interface SelectInputProps<T> {
     label: string;
     value: T;
+    viewOnly?: boolean;
     erro?: boolean;
     handleChange: (e: T) => void;
     options: T[];
@@ -16,6 +17,7 @@ interface SelectInputProps<T> {
 function SelectInput<T> ({
     label,
     value,
+    viewOnly = false,
     erro = false,
     handleChange,
     options,
@@ -32,6 +34,7 @@ function SelectInput<T> ({
                 erro ? { borderColor: theme.colors.error } : {}
             ]}>
                 <Picker
+                    enabled={!viewOnly}
                     selectedValue={value} style={styles.picker}
                     onValueChange={(itemValue) => handleChange(itemValue)}
 

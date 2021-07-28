@@ -16,9 +16,37 @@ export default function Cadastro () {
     const db = SQLite.openDatabase('dados.db');
     const navigation = useNavigation();
     const [etapa, setEtapa] = useState(0);
-    const [dadosBase, setDadosBase] = useState<DadosBase>();
-    const [DadosEndereco, setDadosEndereco] = useState<DadosEndereco>();
-    const [DadosVacina, setDadosVacina] = useState<DadosVacina>();
+    const [dadosBase, setDadosBase] = useState<DadosBase>({
+        nome: 'Ivanzao',
+        cpf: 78923465,
+        cns: 2390847,
+        telefone: 2038947,
+        nascimento: '23089',
+        sexo: 'Masculino',
+        raca: 'Branco',
+        gestante: false,
+        puerpera: false
+    });
+    const [dadosEndereco, setDadosEndereco] = useState<DadosEndereco>({
+        nomeSocial: '',
+        nomeDaMae: 'Josefina',
+        pais: 'Brasil',
+        uf: 'SP',
+        municipio: 'São Paulo',
+        zona: 'rural',
+        logradouro: 'Rua Pedro Afonso',
+        numero: 2345,
+        bairro: 'perdizes',
+        complemento: '',
+        email: 'pintomole@gmail.com'
+    });
+    const [dadosVacina, setDadosVacina] = useState<DadosVacina>({
+        imunobiologico: 'astrazeneca',
+        data: '12/03/2021',
+        segundaDose: false,
+        lote: 2345
+    });
+    const [enviar, setEnviar] = useState(false);
 
     function EtapaAtual () {
         switch (etapa) {
@@ -76,9 +104,9 @@ export default function Cadastro () {
             trx.executeSql(
                 "INSERT INTO Pacientes \
                 (nome, cpf, cns, telefone, nascimento, sexo, raca, \
-                gestante, puerpera, nome_social, nome_da_mae, pais, uf, \
+                gestante, puerpera, nomeSocial, nomeDaMae, pais, uf, \
                 municipio, zona, logradouro, numero, bairro, complemento, \
-                email, imunobiologico, data, segunda_dose, lote) \
+                email, imunobiologico, data, segundaDose, lote) \
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 [dadosBase.nome, dadosBase.cpf, dadosBase.cns, dadosBase.telefone, dadosBase.nascimento, dadosBase.sexo, dadosBase.raca,
                 dadosBase.gestante, dadosBase.puerpera, dadosEndereco.nomeSocial, dadosEndereco.nomeDaMae, dadosEndereco.pais, dadosEndereco.uf,
@@ -105,8 +133,8 @@ export default function Cadastro () {
                 raca TEXT NOT NULL, \
                 gestante BOOLEAN NOT NULL, \
                 puerpera BOOLEAN NOT NULL, \
-                nome_social TEXT, \
-                nome_da_mae TEXT NOT NULL, \
+                nomeSocial TEXT, \
+                nomeDaMae TEXT NOT NULL, \
                 pais TEXT NOT NULL, \
                 uf TEXT NOT NULL, \
                 municipio TEXT NOT NULL, \
@@ -118,7 +146,7 @@ export default function Cadastro () {
                 email TEXT NOT NULL, \
                 imunobiologico TEXT NOT NULL, \
                 data TEXT NOT NULL, \
-                segunda_dose BOOLEAN NOT NULL, \
+                segundaDose BOOLEAN NOT NULL, \
                 lote INT NOT NULL);"
               );
         });
