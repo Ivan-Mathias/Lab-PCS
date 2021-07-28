@@ -3,6 +3,10 @@ import { View, Text } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Button } from "react-native-paper";
 
+export type DateTimeProps = {
+    event : Event,
+    selectedDate? : Date | undefined
+}
 
 export default function  DateTime() {
   const [date, setDate] = useState(new Date());
@@ -11,7 +15,7 @@ export default function  DateTime() {
     <View>
       <View style={{justifyContent: 'center'}}>
         <Button children="" color="#909090" onPress={() => {setShow(true)}}/>
-        <Text style={{position: 'absolute', marginLeft: 10}}>{date.getDate()}/{date.getMonth()}/{date.getUTCFullYear()}</Text>
+        <Text style={{position: 'absolute', marginLeft: 10}}>{date.getDate()}/{date.getMonth()+1}/{date.getUTCFullYear()}</Text>
       </View>
       {show && (
         <DateTimePicker
