@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from "@react-navigation/stack";
 
 import Cadastro from "./src/screens/Cadastro";
+import Camera from "./src/screens/Camera";
 import Login from "./src/screens/Login";
 import Home from "./src/screens/Home";
 import PacientesPendentes from "./src/screens/Pacientes/PacientesPendentes";
@@ -19,6 +20,7 @@ export default function Routes() {
             >
                 <Screen name="Home" component={Home}/>
                 <Screen name="Cadastro" component={Cadastro}/>
+                <Screen name="Camera" component={Camera}/>
                 <Screen name="SignIn" component={Login}/>
                 <Screen name="Paciente" component={Paciente}/>
                 <Screen name="Pacientes Carregados" component={PacientesCarregados}/>

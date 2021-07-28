@@ -1,7 +1,7 @@
 # File created using '.gitignore Generator' for Visual Studio Code: https://bit.ly/vscode-gig
 
-# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,node,react,reactnative,typings,web
-# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,node,react,reactnative,typings,web
+# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,typings,reactnative,react,node
+# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,typings,reactnative,react,node
 
 ### Node ###
 # Logs
@@ -11,6 +11,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+.pnpm-debug.log*
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
@@ -47,8 +48,8 @@ build/Release
 node_modules/
 jspm_packages/
 
-# TypeScript v1 declaration files
-typings/
+# Snowpack dependency directory (https://snowpack.dev/)
+web_modules/
 
 # TypeScript cache
 *.tsbuildinfo
@@ -58,9 +59,6 @@ typings/
 
 # Optional eslint cache
 .eslintcache
-
-# Optional stylelint cache
-.stylelintcache
 
 # Microbundle cache
 .rpt2_cache/
@@ -80,7 +78,7 @@ typings/
 # dotenv environment variables file
 .env
 .env.test
-.env*.local
+.env.production
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -88,18 +86,11 @@ typings/
 
 # Next.js build output
 .next
+out
 
 # Nuxt.js build / generate output
 .nuxt
 dist
-
-# Storybook build outputs
-.out
-.storybook-out
-storybook-static
-
-# rollup.js default build output
-dist/
 
 # Gatsby files
 .cache/
@@ -125,9 +116,12 @@ dist/
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
-# Temporary folders
-tmp/
-temp/
+# yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
 
 ### react ###
 .DS_*
@@ -194,6 +188,7 @@ captures/
 .idea/assetWizardSettings.xml
 .idea/dictionaries
 .idea/libraries
+.idea/jarRepositories.xml
 # Android Studio 3 in .gitignore file.
 .idea/caches
 .idea/modules.xml
@@ -233,6 +228,9 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+
+# Android Profiling
+*.hprof
 
 ### ReactNative.Buck Stack ###
 buck-out/
@@ -294,15 +292,13 @@ gradle-app.setting
 
 # Dependency directories
 
-# TypeScript v1 declaration files
+# Snowpack dependency directory (https://snowpack.dev/)
 
 # TypeScript cache
 
 # Optional npm cache directory
 
 # Optional eslint cache
-
-# Optional stylelint cache
 
 # Microbundle cache
 
@@ -319,10 +315,6 @@ gradle-app.setting
 # Next.js build output
 
 # Nuxt.js build / generate output
-
-# Storybook build outputs
-
-# rollup.js default build output
 
 # Gatsby files
 # Comment in the public line in if your project uses Gatsby and not Next.js
@@ -341,7 +333,7 @@ gradle-app.setting
 
 # Stores VSCode versions used for testing VSCode extensions
 
-# Temporary folders
+# yarn v2
 
 ### ReactNative.Xcode Stack ###
 # Xcode
@@ -410,27 +402,15 @@ typings
 !.vscode/extensions.json
 *.code-workspace
 
+# Local History for Visual Studio Code
+.history/
+
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
 .ionide
 
-### Web ###
-*.asp
-*.cer
-*.csr
-*.css
-*.htm
-*.html
-*.js
-*.jsp
-*.php
-*.rss
-*.wasm
-*.wat
-*.xhtml
-
-# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,node,react,reactnative,typings,web
+# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,typings,reactnative,react,node
 
 # Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
 

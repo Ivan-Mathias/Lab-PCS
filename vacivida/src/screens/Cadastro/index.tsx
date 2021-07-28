@@ -10,9 +10,12 @@ import { styles } from "./styles";
 import { useEffect } from "react";
 
 import * as SQLite from 'expo-sqlite';
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation } from "@react-navigation/native";
 
-export default function Cadastro () {
+type CadastroProps = {
+    route: RouteProp<{ params: { dados: any } }, 'params'>
+}
+export default function Cadastro({ route: { params } }: CadastroProps) {
     const db = SQLite.openDatabase('dados.db');
     const navigation = useNavigation();
     const [etapa, setEtapa] = useState(0);
@@ -48,7 +51,35 @@ export default function Cadastro () {
     });
     const [enviar, setEnviar] = useState(false);
 
-    function EtapaAtual () {
+    if (params != null && params.dados != null && dadosBase === undefined) {
+        const dados = params.dados;
+        setDadosBase({
+            nome: dados == null ? null : dados['nome'],
+            cpf: dados == null ? null : dados['cpf'],
+            cns: null,
+            telefone: null,
+            nascimento: dados == null ? null : dados['nascimento'],
+            sexo: null,
+            raca: null,
+            gestante: false,
+            puerpera: false,
+        });
+        setDadosEndereco({
+            nomeSocial: '',
+            nomeDaMae: dados == null ? '' : dados['nomeMae'],
+            pais: '',
+            uf: '',
+            municipio: '',
+            zona: '',
+            logradouro: '',
+            numero: 0,
+            bairro: '',
+            complemento: undefined,
+            email: '',
+        });
+    }
+
+    function EtapaAtual() {
         switch (etapa) {
             case 0:
                 return (
@@ -79,22 +110,22 @@ export default function Cadastro () {
     }
 
     function handleVoltar() {
-        if(etapa >= 0){
+        if (etapa >= 0) {
             setEtapa(etapa - 1)
         }
     }
 
-    function handleDadosBase (dados: DadosBase) {
+    function handleDadosBase(dados: DadosBase) {
         setDadosBase(dados);
         setEtapa(etapa + 1)
     }
 
-    function handleDadosEndereco (dados: DadosEndereco) {
+    function handleDadosEndereco(dados: DadosEndereco) {
         setDadosEndereco(dados);
         setEtapa(etapa + 1)
     }
 
-    function handleDadosVacina (dados: DadosVacina) {
+    function handleDadosVacina(dados: DadosVacina) {
         setDadosVacina(dados);
         setEnviar(true);
     }
@@ -163,15 +194,15 @@ export default function Cadastro () {
     return(
         <View style={{flex: 1}}>
             <View>
-                <Options/>
+                <Options />
             </View>
             <View style={styles.container}>
                 <Text style={styles.titulo}>Cadastro</Text>
                 <Text style={styles.subtitulo}>Entre com os dados do paciente</Text>
                 <View style={styles.campos}>
-                    <EtapaAtual/>
+                    <EtapaAtual />
                 </View>
-                <View style={styles.linha}/>
+                <View style={styles.linha} />
             </View>
         </View>
     );
