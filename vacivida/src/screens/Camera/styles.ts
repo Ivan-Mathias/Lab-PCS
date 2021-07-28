@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
         left: 0,
         width: '100%',
         height: '100%',
-        backgroundColor: 'rgba(1,1,1,.5)',
+        backgroundColor: 'rgba(255,255,255,.3)',
     },
     processingOverlayText: {
         paddingTop: '20%',
@@ -38,4 +38,10 @@ export const styles = StyleSheet.create({
         color: 'black',
         fontSize: 30,
     },
+    foto: {
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+    }
 })
