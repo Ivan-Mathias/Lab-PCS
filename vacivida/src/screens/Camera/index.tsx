@@ -13,7 +13,11 @@ import { Image as RNImage } from "react-native";
 
 export default function Foto() {
     const navigation = useNavigation();
-    const ocr = new OCR();
+    const ocr = useRef<OCR>();
+
+    if (ocr.current == null) {
+        ocr.current = new OCR();
+    }
 
     const [hasPermission, setHasPermission] = useState<boolean | null>(null);
     const [processing, setProcessing] = useState<number | null>(null);
@@ -54,10 +58,10 @@ export default function Foto() {
         setPictureUri(opts.uri);
         const img = new Image();
         img.src = opts.uri;
-        ocr.onWorkerProgress = (progress) => setProcessing(progress);
+        ocr.current.onWorkerProgress = (progress) => setProcessing(progress);
         img.onload = async () => {
-            const results = await ocr.processFile(img, [[0, 0], [0, img.height - 1], [img.width - 1, img.height - 1], [img.width - 1, 0]])
-            navigation.navigate('Cadastro', { results: results });
+            const results = await ocr.current.processFile(img, [[0, 0], [0, img.height - 1], [img.width - 1, img.height - 1], [img.width - 1, 0]])
+            navigation.navigate('Cadastro', { dados: results });
         }
     };
 
