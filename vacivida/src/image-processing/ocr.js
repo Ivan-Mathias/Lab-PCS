@@ -143,10 +143,10 @@ export class OCR {
         }
 
         return {
-            Nome: ocrKeyLookup(result.data.blocks, 'Nome', 1)[0],
-            CPF: ocrKeyLookup(result.data.blocks, 'CPF', 1)[0],
-            Filiacao: ocrKeyLookup(result.data.blocks, 'Filiação', 2).join(' e '),
-            'Data de Nascimento': ocrKeyLookup(result.data.blocks, 'Data de Nascimento', 1)[0],
+            nome: ocrKeyLookup(result.data.blocks, 'Nome', 1)[0],
+            cpf: ocrKeyLookup(result.data.blocks, 'CPF', 1)[0],
+            nomeMae: ocrKeyLookup(result.data.blocks, 'Filiação', 2)[1],
+            nascimento: ocrKeyLookup(result.data.blocks, 'Data de Nascimento', 1)[0],
         };
     }
 }
