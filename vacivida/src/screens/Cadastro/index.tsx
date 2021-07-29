@@ -12,12 +12,29 @@ import { useEffect } from "react";
 import * as SQLite from 'expo-sqlite';
 import { RouteProp, useNavigation } from "@react-navigation/native";
 
+function getCPF(raw: string) {
+    if (raw == null) return null;
+
+    raw = raw.replace('.', '').replace('/', '');
+    if (!/^[0-9]+$/.test(raw)) return null;
+
+    return raw;
+}
+
+function getNome(raw: string) {
+    if (raw == null) return null;
+    if (!/[a-zA-Z]/.test(raw)) return null;
+
+    return raw;
+}
+
 type CadastroProps = {
     route: RouteProp<{ params: { dados: any } }, 'params'>
 }
 export default function Cadastro({ route: { params } }: CadastroProps) {
     const db = SQLite.openDatabase('dados.db');
     const navigation = useNavigation();
+
     const [etapa, setEtapa] = useState(0);
     const [dadosBase, setDadosBase] = useState<DadosBase>();
     const [dadosEndereco, setDadosEndereco] = useState<DadosEndereco>();
@@ -27,8 +44,8 @@ export default function Cadastro({ route: { params } }: CadastroProps) {
     if (params != null && params.dados != null && dadosBase === undefined) {
         const dados = params.dados;
         setDadosBase({
-            nome: dados == null ? null : dados['nome'],
-            cpf: dados == null ? null : dados['cpf'],
+            nome: dados == null ? null : getNome(dados['nome']),
+            cpf: dados == null ? null : getCPF(dados['cpf']),
             cns: null,
             telefone: null,
             nascimento: dados == null ? null : dados['nascimento'],
@@ -39,7 +56,7 @@ export default function Cadastro({ route: { params } }: CadastroProps) {
         });
         setDadosEndereco({
             nomeSocial: '',
-            nomeDaMae: dados == null ? '' : dados['nomeMae'],
+            nomeDaMae: dados == null ? '' : getNome(dados['nomeMae']),
             pais: '',
             uf: '',
             municipio: '',
@@ -143,7 +160,7 @@ export default function Cadastro({ route: { params } }: CadastroProps) {
         }
     }
 
-    function createTable () {
+    function createTable() {
         db.transaction(trx => {
             trx.executeSql(
                 "CREATE TABLE IF NOT EXISTS Pacientes \
@@ -185,8 +202,8 @@ export default function Cadastro({ route: { params } }: CadastroProps) {
         enviar && enviarDados();
     }, [enviar]);
 
-    return(
-        <View style={{flex: 1}}>
+    return (
+        <View style={{ flex: 1 }}>
             <View>
                 <Options />
             </View>
