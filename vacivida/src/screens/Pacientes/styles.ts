@@ -21,6 +21,19 @@ export const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: theme.colors.fields.border,
     },
+    botao: {
+        marginTop: 10,
+        marginBottom: 40,
+        paddingVertical: 5,
+        width: 260,
+        alignSelf: 'center',
+        backgroundColor: theme.colors.accent,
+    },
+    botaoContent:{
+        justifyContent: 'center',
+        color: "#fff",
+        fontSize: 24,
+    },
     nomeSecao:{
         marginTop: 20,
         marginLeft: 16,

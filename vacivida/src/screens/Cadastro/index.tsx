@@ -120,24 +120,44 @@ export default function Cadastro({ route: { params } }: CadastroProps) {
         setEnviar(true);
     }
 
-    function enviarDados() {
+    async function enviarDados () {
+        if(dadosBase && dadosEndereco && dadosVacina) {
+            navigation.navigate("Home");
+            let enviou = false;
+            try {
+                const controller = new AbortController();
+                const id = setTimeout(() => controller.abort(), 5000);
+                await fetch('http://localhost:3344/test', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ ...dadosBase, ...dadosEndereco, ...dadosVacina }),
+                    signal: controller.signal
+                });
+                clearTimeout(id);
+                enviou = true;
+            } catch (error) {
+                console.log(error);
+            }
+
         db.transaction(trx => {
             trx.executeSql(
                 "INSERT INTO Pacientes \
                 (nome, cpf, cns, telefone, nascimento, sexo, raca, \
                 gestante, puerpera, nomeSocial, nomeDaMae, pais, uf, \
                 municipio, zona, logradouro, numero, bairro, complemento, \
-                email, imunobiologico, data, segundaDose, lote) \
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    email, imunobiologico, data, segundaDose, lote, enviado) \
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 [dadosBase?.nome, dadosBase?.cpf, dadosBase?.cns, dadosBase?.telefone, dadosBase?.nascimento, dadosBase?.sexo, dadosBase?.raca,
                 dadosBase?.gestante, dadosBase?.puerpera, dadosEndereco?.nomeSocial, dadosEndereco?.nomeDaMae, dadosEndereco?.pais, dadosEndereco?.uf,
                 dadosEndereco?.municipio, dadosEndereco?.zona, dadosEndereco?.logradouro, dadosEndereco?.numero, dadosEndereco?.bairro,
-                dadosEndereco?.complemento, dadosEndereco?.email, dadosVacina?.imunobiologico, dadosVacina?.data, dadosVacina?.segundaDose, dadosVacina?.lote],
-                result => console.log(result)
+                    dadosEndereco?.complemento, dadosEndereco?.email, dadosVacina?.imunobiologico, dadosVacina?.data, dadosVacina?.segundaDose, dadosVacina?.lote,
+                    enviou]
             );
-            navigation.navigate("Home")
-        },
-            error => console.log(error));
+            });
+        }
     }
 
     function createTable() {
@@ -168,8 +188,9 @@ export default function Cadastro({ route: { params } }: CadastroProps) {
                 imunobiologico TEXT NOT NULL, \
                 data TEXT NOT NULL, \
                 segundaDose BOOLEAN NOT NULL, \
-                lote INT NOT NULL);"
-            );
+                lote INT NOT NULL, \
+                enviado BOOLEAN NOT NULL);"
+              );
         });
     }
 
