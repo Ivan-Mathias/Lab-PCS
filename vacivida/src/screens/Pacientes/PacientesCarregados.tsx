@@ -30,6 +30,22 @@ export default function PacientesCarregados () {
         })
     }
 
+    function searchDados (like: string) {
+        db.transaction(trx => {
+            trx.executeSql(
+                `SELECT * FROM Pacientes WHERE enviado = 1 AND nome LIKE '%${like}%'`,
+                [],
+                (_, { rows }) => {
+                    const values = [];
+                    for (let i = 0; i < rows.length; i++) {
+                        values.push(rows.item(i));
+                    }
+                    console.log('Resultado: ', values)
+                    setPacientes(values)
+                });
+        })
+    }
+
     useEffect(() => {
         loadDados();
     }, []);
@@ -47,7 +63,7 @@ export default function PacientesCarregados () {
                 <IconButton style={styles.searchIcon}
                     icon={require('../../assets/search.png')}
                     size = {28}
-                    onPress={() => null}
+                    onPress={() => searchDados(text)}
                     color="#909090"
                 />
             </View>

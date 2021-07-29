@@ -15,7 +15,6 @@ export default function PacientesPendentes () {
     const [pacientes, setPacientes] = useState<Paciente[]>([]);
 
     function loadDados () {
-
         db.transaction(trx => {
             trx.executeSql(
                 'SELECT * FROM Pacientes WHERE enviado = 0',
@@ -25,6 +24,22 @@ export default function PacientesPendentes () {
                     for (let i = 0; i < rows.length; i++) {
                         values.push(rows.item(i));
                     }
+                    setPacientes(values)
+                });
+        })
+    }
+
+    function searchDados (like: string) {
+        db.transaction(trx => {
+            trx.executeSql(
+                `SELECT * FROM Pacientes WHERE enviado = 0 AND nome LIKE '%${like}%'`,
+                [],
+                (_, { rows }) => {
+                    const values = [];
+                    for (let i = 0; i < rows.length; i++) {
+                        values.push(rows.item(i));
+                    }
+                    console.log('Resultado: ', values)
                     setPacientes(values)
                 });
         })
@@ -68,6 +83,10 @@ export default function PacientesPendentes () {
         loadDados();
     }, []);
 
+    useEffect(() => {
+        searchDados(text);
+    }, [text]);
+
     return(
         <SafeAreaView style={{flex: 1}}>
             <Options/>
@@ -81,7 +100,7 @@ export default function PacientesPendentes () {
                 <IconButton style={styles.searchIcon}
                     icon={require('../../assets/search.png')}
                     size = {28}
-                    onPress={() => null}
+                    onPress={() => searchDados(text)}
                     color="#909090"
                 />
             </View>
