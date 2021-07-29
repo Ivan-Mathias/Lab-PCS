@@ -5,7 +5,7 @@ import { Text, View, TextInput, SafeAreaView} from "react-native";
 import Options from "../../components/Options/index";
 import ListaPacientes from "../../components/ListaPacientes/index";
 import { styles } from "./styles";
-import { IconButton } from "react-native-paper";
+import { Button, IconButton } from "react-native-paper";
 import * as SQLite from 'expo-sqlite';
 import Paciente from "../../types/paciente";
 const db = SQLite.openDatabase('dados.db');
@@ -28,6 +28,40 @@ export default function PacientesPendentes () {
                     setPacientes(values)
                 });
         })
+    }
+
+    async function enviarDados () {
+        if(pacientes.length > 0) {
+            try {
+                const controller = new AbortController();
+                const id = setTimeout(() => controller.abort(), 5000);
+                await fetch('http://192.168.0.19:3344/test', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(pacientes),
+                    signal: controller.signal
+                });
+                clearTimeout(id);
+
+                db.transaction(trx => {
+                    for (let i = 0; i < pacientes.length; i++) {
+                        console.log("atualizando paciente ", pacientes[i].id)
+                        trx.executeSql(
+                            "UPDATE Pacientes \
+                            SET enviado = 1 \
+                            WHERE id = ?",
+                            [pacientes[i].id]
+                        );
+                    }
+                });
+            } catch (error) {
+                console.log(error);
+            }
+            loadDados();
+        }
     }
 
     useEffect(() => {
@@ -55,6 +89,16 @@ export default function PacientesPendentes () {
                 <ListaPacientes pacientes={pacientes}/>
             </SafeAreaView>
 
+            {pacientes.length > 0 && (
+                <Button
+                    style={styles.botao}
+                    children="Reenviar"
+                    onPress={enviarDados}
+                    color="#fff"
+                    labelStyle={styles.botaoContent}
+                    uppercase={false}
+                />
+            )}
             <StatusBar style="dark" />
         </SafeAreaView>
     );
