@@ -18,8 +18,8 @@ export default function PacientesCarregados () {
 
         db.transaction(trx => {
             trx.executeSql(
-                'SELECT * FROM Pacientes WHERE enviado = 1',
-                [],
+                'SELECT * FROM Pacientes WHERE enviado = ?',
+                [true],
                 (_, { rows }) => {
                     const values = [];
                     for (let i = 0; i < rows.length; i++) {
@@ -33,8 +33,8 @@ export default function PacientesCarregados () {
     function searchDados (like: string) {
         db.transaction(trx => {
             trx.executeSql(
-                `SELECT * FROM Pacientes WHERE enviado = 1 AND nome LIKE '%${like}%'`,
-                [],
+                `SELECT * FROM Pacientes WHERE enviado = ? AND nome LIKE '%${like}%'`,
+                [true],
                 (_, { rows }) => {
                     const values = [];
                     for (let i = 0; i < rows.length; i++) {

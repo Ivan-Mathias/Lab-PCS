@@ -17,8 +17,8 @@ export default function PacientesPendentes () {
     function loadDados () {
         db.transaction(trx => {
             trx.executeSql(
-                'SELECT * FROM Pacientes WHERE enviado = 0',
-                [],
+                'SELECT * FROM Pacientes WHERE enviado = ?',
+                [false],
                 (_, { rows }) => {
                     const values = [];
                     for (let i = 0; i < rows.length; i++) {
@@ -32,8 +32,8 @@ export default function PacientesPendentes () {
     function searchDados (like: string) {
         db.transaction(trx => {
             trx.executeSql(
-                `SELECT * FROM Pacientes WHERE enviado = 0 AND nome LIKE '%${like}%'`,
-                [],
+                `SELECT * FROM Pacientes WHERE enviado = ? AND nome LIKE '%${like}%'`,
+                [false],
                 (_, { rows }) => {
                     const values = [];
                     for (let i = 0; i < rows.length; i++) {
@@ -50,7 +50,7 @@ export default function PacientesPendentes () {
             try {
                 const controller = new AbortController();
                 const id = setTimeout(() => controller.abort(), 5000);
-                await fetch('http://192.168.0.19:3344/test', {
+                await fetch('http://localhost:3344/test', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -66,9 +66,9 @@ export default function PacientesPendentes () {
                         console.log("atualizando paciente ", pacientes[i].id)
                         trx.executeSql(
                             "UPDATE Pacientes \
-                            SET enviado = 1 \
+                            SET enviado = ? \
                             WHERE id = ?",
-                            [pacientes[i].id]
+                            [true, pacientes[i].id]
                         );
                     }
                 });

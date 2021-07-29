@@ -17,15 +17,14 @@ const HomeScreen = () => {
     const [pendentes, setPendentes] = useState(0);
 
     function loadDados () {
-
         db.transaction(trx => {
             trx.executeSql(
-                'SELECT * FROM Pacientes WHERE enviado = 1',
-                [],
+                'SELECT * FROM Pacientes WHERE enviado = ?',
+                [true],
                 (_, { rows }) => setEnviados(rows.length));
             trx.executeSql(
-                'SELECT * FROM Pacientes WHERE enviado = 0',
-                [],
+                'SELECT * FROM Pacientes WHERE enviado = ?',
+                [false],
                 (_, { rows }) => setPendentes(rows.length));
         })
     }
