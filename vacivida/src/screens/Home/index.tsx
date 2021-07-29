@@ -13,16 +13,20 @@ const db = SQLite.openDatabase('dados.db');
 
 const HomeScreen = () => {
     const navigation = useNavigation();
+    const [enviados, setEnviados] = useState(0);
     const [pendentes, setPendentes] = useState(0);
 
     function loadDados () {
 
         db.transaction(trx => {
             trx.executeSql(
-                'SELECT * FROM Pacientes',
+                'SELECT * FROM Pacientes WHERE enviado = 1',
+                [],
+                (_, { rows }) => setEnviados(rows.length));
+            trx.executeSql(
+                'SELECT * FROM Pacientes WHERE enviado = 0',
                 [],
                 (_, { rows }) => setPendentes(rows.length));
-            // trx.executeSql('DROP TABLE Pacientes');
         })
     }
 
@@ -56,6 +60,7 @@ const HomeScreen = () => {
                 <Text style={styles.nomeSecao}>PACIENTES CADASTRADOS</Text>
                 <View>
                     <Text style={styles.conteudoUnico}>Carregamento completo</Text>
+                    <Text style={styles.nPendentes}>{enviados}</Text>
                     <Button style={styles.botaoSecudario}
                         children=""
                         contentStyle={{width: 640, flexDirection: 'row-reverse'}}

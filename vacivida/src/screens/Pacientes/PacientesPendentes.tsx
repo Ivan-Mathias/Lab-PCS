@@ -18,7 +18,7 @@ export default function PacientesPendentes () {
 
         db.transaction(trx => {
             trx.executeSql(
-                'SELECT * FROM Pacientes',
+                'SELECT * FROM Pacientes WHERE enviado = 0',
                 [],
                 (_, { rows }) => {
                     const values = [];
