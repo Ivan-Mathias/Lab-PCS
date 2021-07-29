@@ -110,7 +110,7 @@ export default function Cadastro({ route: { params } }: CadastroProps) {
             try {
                 const controller = new AbortController();
                 const id = setTimeout(() => controller.abort(), 5000);
-                await fetch('http://192.168.0.19:3344/test', {
+                await fetch('http://localhost:3344/test', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
